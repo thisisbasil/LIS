@@ -5,10 +5,10 @@ std::string LIS_model::getname()
     return this->name;
 }
 
-std::vector<int> n_squared::run(std::vector<int> list)
+int n_squared::run(std::vector<int> list)
 {
-    std::vector<int> retval;
-    return retval;
+    int length = 0;
+    return length;
 }
 
 int n_log_n::binSearch(const std::vector<int>& v,int lo, int hi, int val)
@@ -24,18 +24,18 @@ int n_log_n::binSearch(const std::vector<int>& v,int lo, int hi, int val)
 }
 
 
-std::vector<int> n_log_n::run(std::vector<int> list)
+int n_log_n::run(std::vector<int> list)
 {
     std::vector<int> retval(list.size(),0);
-    int len = 0;
-    for (auto elem : list)
-    {
-        int i = this->binSearch(retval,0,len,elem);
-        if (i < 0)
-            i = (i + 1) * -1;
-        retval[i] = elem;
-        if (i == len)
-            ++len;
-    }
-    return retval;
+        int length = 1;
+        retval[0] = list[0];
+        for (auto i = 1; i < list.size(); i++) {
+            if (list[i] < retval[0])
+                retval[0] = list[i];
+            else if (list[i] > retval[length-1])
+                retval[length++] = list[i];
+            else
+                retval[binSearch(retval, -1, length-1, list[i])] = list[i];
+        }
+    return length;
 }
