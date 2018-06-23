@@ -1,9 +1,12 @@
 #include <iostream>
+#include "lis.h"
 
-using namespace std;
 
 int main()
 {
-    cout << "Hello World!" << endl;
+    std::vector<int> v = {0, 8, 4, 12, 2,8};
+    std::shared_ptr<LIS_model> strat(new n_log_n);
+    LIS model(strat);
+    model.runModel(v);
     return 0;
 }

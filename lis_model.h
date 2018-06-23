@@ -18,12 +18,21 @@ class n_log_n : public LIS_model
 public:
     n_log_n() { this->name = "n*log(n)"; }
     std::vector<int> run(std::vector<int>);
+private:
+    int binSearch(const std::vector<int>&,int,int,int);
 };
 
 class n_squared : public LIS_model
 {
 public:
     n_squared() { this->name = "n^2"; }
+    std::vector<int> run(std::vector<int>);
+};
+
+class exponential : public LIS_model
+{
+public:
+    exponential() { this->name = "2^n"; }
     std::vector<int> run(std::vector<int>);
 };
 
