@@ -2,22 +2,25 @@
 #include "lis.h"
 #include <cstdlib>
 
-const int n = 1000;
-
 int main()
 {
-    std::vector<int> v;
-    for(auto i = 0; i < n; ++i)
+    std::cout << "n,n_log_n,n_squared\n";
+    for(auto n = 1000; n <= 20000; n+=1000)
     {
-        int temp = rand()%1000 + 1;
-        v.push_back(temp);
+        std::vector<int> v;
+        for(auto i = 0; i < n; ++i)
+        {
+            int temp = rand()%1000 + 1;
+            v.push_back(temp);
+        }
+        LIS model;
+        std::shared_ptr<LIS_model> strat(new n_log_n);
+        model.setModel(strat);
+        auto nln = model.runModel(v).runtime;
+        strat.reset(new n_squared);
+        model.setModel(strat);
+        auto ns = model.runModel(v).runtime;
+        std::cout << n << ',' << nln << ',' << ns << '\n';
     }
-    std::shared_ptr<LIS_model> strat(new n_squared);
-    LIS model;//strat);
-    model.setModel(strat);
-    std::cout << model.runModel(v) << std::endl;
-    strat.reset(new n_log_n);
-    model.setModel(strat);
-    std::cout << model.runModel(v) << std::endl;
     return 0;
 }
