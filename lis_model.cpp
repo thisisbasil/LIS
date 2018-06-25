@@ -5,7 +5,7 @@ std::string LIS_model::getname()
     return this->name;
 }
 
-std::vector<int> n_squared::run(std::vector<int> list)
+std::vector<int> n_squared::run(const std::vector<int>& list)
 {
     std::vector<int> L(list.size(),1);
     for(auto i = 0; i < list.size(); ++i)
@@ -65,7 +65,7 @@ int n_log_n::binSearch(const std::vector<int>& v, std::vector<int>& tail,
     return hi;
 }
 
-std::vector<int> n_log_n::run(std::vector<int> list)
+std::vector<int> n_log_n::run(const std::vector<int>& list)
 {
     std::vector<int> tail(list.size(),0),
                      prev(list.size(),-1), retval;
@@ -89,4 +89,74 @@ std::vector<int> n_log_n::run(std::vector<int> list)
     for(auto i = tail[len-1]; i >= 0; i = prev[i])
         retval.insert(retval.begin(),list[i]);
     return retval;
+}
+
+std::vector<int> patience::construct(const std::vector<std::vector<int> > &v)
+{
+    std::vector<int> retval;
+    int prev;
+    for (auto i = v.end()-1; i >= v.begin(); i--)
+    {
+        if (i == v.end() - 1)
+        {
+            auto j = i[i->size()-1][0];
+            retval.push_back(j);
+            prev = j;
+        }
+        else
+        {
+            for (auto j = i->begin(); j < i->end(); j++)
+            {
+                if (prev > *j)
+                {
+                    retval.insert(retval.begin(),*j);
+                    prev = *j;
+                    break;
+                }
+            }
+        }
+    }
+    return retval;
+}
+
+int patience::getPosn(const std::vector<std::vector<int>>& v, int lo, int hi, int val)
+{
+    int loc = -1;
+    while (hi - lo >= 1)
+    {
+        int mid = lo + (hi-lo)/2;
+        if (val < v[mid][v[mid].size()-1])
+        {
+            loc = mid;
+            int temp = this->getPosn(v,lo,mid,val);
+            if (temp != -1)
+                loc = temp;
+            return loc;
+        }
+        else
+        {
+            loc = this->getPosn(v,mid+1,hi,val);
+            return loc;
+        }
+    }
+    return loc;
+}
+
+std::vector<int> patience::run(const std::vector<int> &list)
+{
+    std::vector<std::vector<int>> piles;
+    for(auto i :list)
+    {
+        int loc = this->getPosn(piles,0,piles.size(),i);
+        if (loc == -1)
+        {
+            std::vector<int> pile(1,i);
+            piles.push_back(pile);
+        }
+        else
+        {
+            piles[loc].push_back(i);
+        }
+    }
+    return this->construct(piles);
 }
