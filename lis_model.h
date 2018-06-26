@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <array>
 
 class LIS_model
 {
@@ -43,8 +44,20 @@ public:
     patience() { this->name = "patience"; }
     std::vector<int> run(const std::vector<int>&);
 private:
-    int getPosn(const std::vector<std::vector<int>>&,int,int,int);
-    std::vector<int> construct(const std::vector<std::vector<int>>&);
+    struct TUPLE
+    {
+        int val;
+        std::array<int,2> back;
+        TUPLE(int _val = -1, int x = -1, int y = -1)
+        {
+            val = _val;
+            back[0] = x;
+            back[1] = y;
+        };
+    };
+    int getPosn(const std::vector<std::vector<TUPLE>>&,int,int,int);
+    std::vector<int> construct(const std::vector<std::vector<TUPLE>>&);
+
 };
 
 #endif // LIS_MODEL_H

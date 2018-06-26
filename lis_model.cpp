@@ -91,41 +91,28 @@ std::vector<int> n_log_n::run(const std::vector<int>& list)
     return retval;
 }
 
-std::vector<int> patience::construct(const std::vector<std::vector<int> > &v)
+std::vector<int> patience::construct(const std::vector<std::vector<TUPLE> > &v)
 {
     std::vector<int> retval;
-    int prev;
-    for (auto i = v.end()-1; i >= v.begin(); i--)
+    int x = v.size() - 1;
+    int y = 0;
+    while (x != -1)
     {
-        if (i == v.end() - 1)
-        {
-            auto j = i[i->size()-1][0];
-            retval.push_back(j);
-            prev = j;
-        }
-        else
-        {
-            for (auto j = i->begin(); j < i->end(); j++)
-            {
-                if (prev > *j)
-                {
-                    retval.insert(retval.begin(),*j);
-                    prev = *j;
-                    break;
-                }
-            }
-        }
+        retval.insert(retval.begin(), v[x][y].val);
+        std::array<int,2> temp = v[x][y].back;
+        x = temp[0];
+        y = temp[1];
     }
     return retval;
 }
 
-int patience::getPosn(const std::vector<std::vector<int>>& v, int lo, int hi, int val)
+int patience::getPosn(const std::vector<std::vector<TUPLE>>& v, int lo, int hi, int val)
 {
     int loc = -1;
     while (hi - lo >= 1)
     {
-        int mid = lo + (hi-lo)/2;
-        if (val < v[mid][v[mid].size()-1])
+        int mid = lo + (hi - lo) / 2;
+        if (val < v[mid][v[mid].size()-1].val)
         {
             loc = mid;
             int temp = this->getPosn(v,lo,mid,val);
@@ -144,18 +131,30 @@ int patience::getPosn(const std::vector<std::vector<int>>& v, int lo, int hi, in
 
 std::vector<int> patience::run(const std::vector<int> &list)
 {
-    std::vector<std::vector<int>> piles;
-    for(auto i :list)
+    std::vector<std::vector<TUPLE>> piles;
+    for(auto i : list)
     {
         int loc = this->getPosn(piles,0,piles.size(),i);
+        TUPLE t(i);
         if (loc == -1)
         {
-            std::vector<int> pile(1,i);
+            if (piles.size() >= 1)
+            {
+                int x = piles.size() - 1;
+                int y = piles[x].size() - 1;
+                t.back[0] = x;
+                t.back[1] = y;
+            }
+            std::vector<TUPLE> pile(1,t);
             piles.push_back(pile);
         }
         else
         {
-            piles[loc].push_back(i);
+            int x = loc - 1;
+            int y = piles[x].size() - 1;
+            t.back[0] = x;
+            t.back[1] = y;
+            piles[loc].push_back(t);
         }
     }
     return this->construct(piles);
