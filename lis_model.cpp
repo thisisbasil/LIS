@@ -14,12 +14,12 @@ double n_squared::getTheoretical(const int& n)
 //log_10
 double n_log_n::getTheoretical(const int & n)
 {
-    return n*log(n);
+    return n*log2(n);
 }
 
 double patience::getTheoretical(const int & n)
 {
-    return n*log(n);
+    return n*log2(n);
 }
 
 std::vector<int> n_squared::run(const std::vector<int>& list)
