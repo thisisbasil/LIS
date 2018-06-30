@@ -1,20 +1,20 @@
 #include <iostream>
 #include "lis.h"
+#include "lis_model.h"
 #include <cstdlib>
 #include <cmath>
-
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <iomanip>
 int main()
 {
-    std::cout << "n,exp,theo\n";
-
-    std::vector<int> input =
+    std::ofstream out;
+    out.open("lis.csv");
+    out << "n,n^2,n^2_theoretical,improved,patience,n_log_n_theoretical\n";
+    for(auto n=50; n<=10000; n+=50)
     {
-        100,200,300,400,500,600,700,800,900,1000,
-        1100,1200,1300,1400,1500,1600,1700,1800,1900,2000
-    };
-
-    for(auto n : input) //= 100; n <= 10000; n+=100)
-    {
+        std::cout << "starting n=" << n << "..." << std::endl;
         std::vector<int> v;
         for(auto i = 0; i < n; ++i)
         {
@@ -22,14 +22,23 @@ int main()
             v.push_back(temp);
         }
         LIS model;
-        std::shared_ptr<LIS_model> strat(new n_log_n);
+        std::shared_ptr<LIS_model> strat = std::make_shared<n_squared>();
         model.setModel(strat);
-        auto nln = model.runModel(v).runtime;
-        strat.reset(new n_squared);
+        LIS::infoTuple n2 = model.runModel(v);
+        strat.reset();
+        strat = std::make_shared<n_log_n>();
         model.setModel(strat);
-        auto ns = model.runModel(v).runtime;
-        //auto ns = log10(n);
-        std::cout << n << ',' << nln << ',' << ns << '\n';
+        LIS::infoTuple nln = model.runModel(v);
+        strat.reset();
+        strat = std::make_shared<patience>();
+        model.setModel(strat);
+        LIS::infoTuple pat = model.runModel(v);
+        out << std::setw(10)
+            << n << ',' << n2.runtime << ','
+            << n2.theoretical << nln.runtime << ','
+            << pat.runtime << pat.theoretical
+            << std::endl;
     }
+    out.close();
     return 0;
 }

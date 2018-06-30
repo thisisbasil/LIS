@@ -1,8 +1,25 @@
 #include "lis_model.h"
+#include <cmath>
 
 std::string LIS_model::getname()
 {
     return this->name;
+}
+
+double n_squared::getTheoretical(const int& n)
+{
+        return pow(n,2);
+}
+
+//log_10
+double n_log_n::getTheoretical(const int & n)
+{
+    return n*log(n);
+}
+
+double patience::getTheoretical(const int & n)
+{
+    return n*log(n);
 }
 
 std::vector<int> n_squared::run(const std::vector<int>& list)

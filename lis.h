@@ -14,10 +14,12 @@ public:
     {
         unsigned long runtime;
         std::vector<int> list;
+        double theoretical;
         friend std::ostream& operator<<(std::ostream& os, const infoTuple& t)
         {
             os << "length of sequence: " << t.list.size()
-               << " runtime: " << t.runtime << "ns\n";
+               << " runtime: " << t.runtime << "ns theoretical: "
+               << t.theoretical << std::endl;
             for (auto i : t.list)
                 os << i << ' ';
             os << std::endl;
