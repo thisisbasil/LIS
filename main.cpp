@@ -33,10 +33,9 @@ int main()
         strat = std::make_shared<patience>();
         model.setModel(strat);
         LIS::infoTuple pat = model.runModel(v);
-        out << std::setw(10)
-            << n << ',' << n2.runtime << ','
-            << n2.theoretical << nln.runtime << ','
-            << pat.runtime << pat.theoretical
+        out << n << ',' << n2.runtime << ','
+            << n2.theoretical <<  ',' << nln.runtime << ','
+            << pat.runtime << ',' << pat.theoretical
             << std::endl;
     }
     out.close();
